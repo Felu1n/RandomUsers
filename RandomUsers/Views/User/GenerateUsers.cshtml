@@ -5,54 +5,47 @@ ViewData["Title"] = "Fake User Generator";
 @section scripts {
     <script>
     $(document).ready(function() {
-        var isLoading = false; // Флаг для отслеживания состояния загрузки данных
-        // Функция для загрузки данных при прокрутке страницы
+        var isLoading = false; 
+       
         function LoadMoreUsers() {
             var errorRate = $('#errorRateInput').val();
             var seed = $('#seedInput').val();
             var region = $('#regionSelect').val();
-            var currentPage = parseInt($('#currentPage').val()); // Получаем текущую страницу
-
-            // Проверяем, не загружаются ли уже данные
+            var currentPage = parseInt($('#currentPage').val());
+            
             if (!isLoading) {
-                isLoading = true; // Устанавливаем флаг загрузки
+                isLoading = true;
 
-                // Отправляем запрос на сервер для загрузки данных следующей страницы
+             
                 $.post('/User/GenerateUsers', { count: 10, errorRate: errorRate, seed: seed, region: region, page: currentPage + 1 }, function(data) {
-                    // Заменяем содержимое таблицы новыми данными
                     $('#userTable tbody').html(data);
-                    // Увеличиваем номер текущей страницы
                     $('#currentPage').val(currentPage + 1);
-
-                    isLoading = false; // Сбрасываем флаг загрузки
+                    isLoading = false;
                 });
             }
         }
 
-        // Обработчик события прокрутки страницы
+
         $(window).scroll(function() {
-            // Проверяем, достиг ли пользователь конца страницы и не загружаются ли уже данные
+
             if ($(window).scrollTop() + $(window).height() >= $(document).height() && !isLoading) {
-                // Вызываем функцию для загрузки дополнительных данных
+      
                 LoadMoreUsers();
             }
         });
 
-        // При загрузке страницы сразу загрузим данные
+  
         LoadMoreUsers();
         
         
         $('#exportButton').click(function() {
-            // Получаем текущие параметры
             var errorRate = $('#errorRateInput').val();
             var seed = $('#seedInput').val();
             var region = $('#regionSelect').val();
             var currentPage = $('#currentPage').val();
-
-            // Формируем URL для запроса экспорта
+            
             var exportUrl = '/User/ExportToCsv?errorRate=' + errorRate + '&seed=' + seed + '&region=' + region + '&page=' + currentPage;
-
-            // Отправляем GET-запрос на сервер для экспорта в CSV
+            
             window.location = exportUrl;
         });
     });

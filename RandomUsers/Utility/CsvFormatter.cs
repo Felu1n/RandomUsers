@@ -15,7 +15,6 @@ namespace RandomUsers.Utility
             using (var writer = new StringWriter())
             using (var csv = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture)))
             {
-                // Настраиваем CsvHelper на запись всех полей объектов UserData
                 csv.WriteHeader<UserData>();
                 csv.NextRecord();
                 csv.WriteRecords(userData);

@@ -30,37 +30,34 @@ namespace RandomUsers.Utility
                     PhoneNumber = faker.Phone.PhoneNumberFormat()
                 };
 
-                // Внесем ошибки в данные в соответствии с заданным уровнем ошибок
+
                 if (errorRate > 0)
                 {
-                    // Определим количество ошибок для текущей записи
+     
                     int errors = (int)Math.Floor(errorRate);
                     double errorChance = errorRate - errors;
                     if (random.NextDouble() < errorChance)
-                        errors++; // Вероятность добавить еще одну ошибку
+                        errors++; 
 
-                    // Вносим ошибки в случайные поля
                     for (int j = 0; j < errors; j++)
                     {
-                        // Выбираем случайное поле и тип ошибки
                         int fieldIndex = random.Next(0, 3);
                         int errorType = random.Next(0, 3);
 
                         switch (fieldIndex)
                         {
-                            case 0: // FullName
+                            case 0: 
                                 userData.FullName = ApplyError(userData.FullName, errorType, random);
                                 break;
-                            case 1: // Address
+                            case 1: 
                                 userData.Address = ApplyError(userData.Address, errorType, random);
                                 break;
-                            case 2: // PhoneNumber
+                            case 2: 
                                 userData.PhoneNumber = ApplyError(userData.PhoneNumber, errorType, random);
                                 break;
                         }
                     }
                 }
-
                 userDataList.Add(userData);
 
             }
@@ -70,25 +67,23 @@ namespace RandomUsers.Utility
             
         }
 
-        // Функция для применения ошибки к строке
         private string ApplyError(string value, int errorType, Random random)
         {
             int index = random.Next(value.Length);
 
             switch (errorType)
             {
-                case 0: // Удаление символа
+                case 0: 
                     return RemoveRandomCharacter(value, random);
-                case 1: // Вставка символа
+                case 1: 
                     return AddRandomCharacter(value, random);
-                case 2: // Перестановка символов
+                case 2: 
                     return SwapAdjacentCharacters(value, random);
                 default:
                     return value;
             }
         }
 
-        // Функция для удаления случайного символа из строки
         private string RemoveRandomCharacter(string value, Random random)
         {
             if (value.Length == 0)
@@ -98,15 +93,13 @@ namespace RandomUsers.Utility
             return value.Remove(index, 1);
         }
 
-        // Функция для добавления случайного символа в случайную позицию в строке
         private string AddRandomCharacter(string value, Random random)
         {
-            char randomChar = (char)random.Next(33, 127); // Выбираем случайный печатный символ
+            char randomChar = (char)random.Next(33, 127);
             int index = random.Next(0, value.Length + 1);
             return value.Insert(index, randomChar.ToString());
         }
 
-        // Функция для перестановки двух соседних символов в строке
         private string SwapAdjacentCharacters(string value, Random random)
         {
             if (value.Length < 2)
@@ -118,11 +111,9 @@ namespace RandomUsers.Utility
 
         private string GenerateUUIDFromSeed(Random random)
         {
-            // Генерируем 16 случайных байт
             byte[] bytes = new byte[16];
             random.NextBytes(bytes);
-
-            // Создаем UUID из байтов
+            
             Guid guid = new Guid(bytes);
             return guid.ToString();
         }
